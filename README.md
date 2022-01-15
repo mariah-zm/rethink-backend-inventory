@@ -1,5 +1,7 @@
 # rethink-backend-inventory
 
+[![CircleCI](https://circleci.com/gh/mariah-zm/rethink-backend-inventory.svg?style=svg)](https://app.circleci.com/pipelines/github/mariah-zm/rethink-backend-inventory)
+
 The Inventory microservice for the RETHINK Backend.
 
 To build this project:
