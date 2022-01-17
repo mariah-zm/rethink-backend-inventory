@@ -1,9 +1,22 @@
 spring:
   jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        temp:
+          use_jdbc_metadata_defaults: 'false'
+    show-sql: 'true'
     hibernate:
-      ddl-auto: create
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-  datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+      ddl-auto: update
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
+
+server:
+  port : 13000
+  servlet:
+      contextPath: "/inventory"
+
+database:
+  url: ${DATABASE_URL}
+
