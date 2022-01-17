@@ -16,5 +16,4 @@ server:
   port : 13000
 
 database:
-  url: "${DATABASE_URL}"
-
+  url: ${DATABASE_URL}

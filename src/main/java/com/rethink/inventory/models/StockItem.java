@@ -20,4 +20,5 @@ public class StockItem {
     private int quantity;
 
     private ProductStatus status;
+
 }
