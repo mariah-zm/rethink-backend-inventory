@@ -14,9 +14,7 @@ spring:
 
 server:
   port : 13000
-  servlet:
-      contextPath: "/inventory"
 
 database:
-  url: ${DATABASE_URL}
+  url: "${DATABASE_URL}"
 
