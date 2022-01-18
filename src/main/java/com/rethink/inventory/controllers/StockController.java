@@ -1,22 +1,46 @@
 package com.rethink.inventory.controllers;
 
+import com.rethink.inventory.exceptions.ProductNotFoundException;
 import com.rethink.inventory.models.Delivery;
-import com.rethink.inventory.models.StockItem;
+import com.rethink.inventory.models.Stock;
+import com.rethink.inventory.services.StockService;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/stock")
 @RestController
 public class StockController {
 
-    @GetMapping("/{productId}")
-    public @ResponseBody StockItem getStockItem(@PathVariable int productId) {
-        // TODO Implement method
-        return null;
+    private final StockService stockService;
+
+    public StockController(StockService stockService) {
+        this.stockService = stockService;
+    }
+
+    @GetMapping("")
+    public @ResponseBody
+    Stock getStock() {
+        return stockService.getStock();
+    }
+
+    @GetMapping("/out")
+    public @ResponseBody
+    Stock getOutOfStock() {
+        return stockService.getOutOfStockItems();
+    }
+
+    @PostMapping("/{productId}/quantity")
+    public @ResponseBody String updateProductQuantity(@PathVariable Integer productId, @RequestParam Integer quantity) {
+        try {
+            stockService.updateProductQuantity(productId, quantity);
+            return "Quantity updated";
+        } catch (ProductNotFoundException e) {
+            return "Update failed: " + e.getMessage();
+        }
     }
 
     @PostMapping("/delivery")
     public @ResponseBody String receiveDelivery(@RequestBody Delivery delivery) {
-        // TODO Implement method
+        stockService.receiveDelivery(delivery);
         return "Stock updated with delivery items";
     }
 

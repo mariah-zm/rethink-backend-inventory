@@ -32,14 +32,14 @@ public class ProductController {
         }
     }
 
-    @GetMapping("")
-    public @ResponseBody List<Product> getALlProducts() {
+    @GetMapping("/all")
+    public @ResponseBody List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("")
     public @ResponseBody
-    List<Product> findProductsByName(@PathVariable String name) {
+    List<Product> findProductsByName(@RequestParam String name) {
         try {
             return productService.searchProductsByName(name);
         } catch (ProductNotFoundException e) {
@@ -47,11 +47,12 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/location")
-    public @ResponseBody Integer getProductLocation(@RequestBody CategoryName categoryName) {
+    @GetMapping("/{productId}/location")
+    public @ResponseBody Integer getProductLocation(@PathVariable Integer productId) {
         try {
-            return categoryService.getCategoryLocation(categoryName);
-        } catch (CategoryNotFoundException e) {
+            Product product = productService.getProduct(productId);
+            return categoryService.getCategoryLocation(product.getCategory());
+        } catch (CategoryNotFoundException | ProductNotFoundException e) {
             return null;
         }
     }
