@@ -13,10 +13,10 @@ spring:
       matching-strategy: ant-path-matcher
 
 server:
-  port: ${PORT:1300}
+  port: ${PORT:13000}
 
 database:
-  url: ${DATABASE_URL}
+  url: "${DATABASE_URL}"
 
 orders-service:
   url: "https://rethink-backend-orders.herokuapp.com/order"
