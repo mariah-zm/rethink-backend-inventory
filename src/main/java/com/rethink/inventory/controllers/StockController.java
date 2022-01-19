@@ -7,6 +7,7 @@ import com.rethink.inventory.services.StockService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/stock")
 @RestController
@@ -30,10 +31,11 @@ public class StockController {
         return stockService.getLowStockItems();
     }
 
-    @PostMapping("/{productId}/quantity")
-    public @ResponseBody String updateProductQuantity(@PathVariable Integer productId, @RequestParam Integer quantity) {
+    @PostMapping("/quantity")
+    public @ResponseBody String updateProductsQuantity(@RequestBody Map<Integer, Integer> quantities) {
         try {
-            stockService.updateProductQuantity(productId, quantity);
+            for (Integer id : quantities.keySet())
+                stockService.updateProductQuantity(id, quantities.get(id));
             return "Quantity updated";
         } catch (ProductNotFoundException e) {
             return "Update failed: " + e.getMessage();
