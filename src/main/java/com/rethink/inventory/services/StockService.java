@@ -4,11 +4,13 @@ import com.rethink.inventory.exceptions.ProductNotFoundException;
 import com.rethink.inventory.models.Delivery;
 import com.rethink.inventory.models.Stock;
 
+import java.util.List;
+
 public interface StockService {
 
     Stock getStock();
 
-    Stock getOutOfStockItems();
+    List<Integer> getLowStockItems();
 
     void updateProductQuantity(Integer productId, int quantity) throws ProductNotFoundException;
 
