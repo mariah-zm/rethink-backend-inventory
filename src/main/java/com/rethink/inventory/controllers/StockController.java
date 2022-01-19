@@ -6,6 +6,8 @@ import com.rethink.inventory.models.Stock;
 import com.rethink.inventory.services.StockService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping("/stock")
 @RestController
 public class StockController {
@@ -22,10 +24,10 @@ public class StockController {
         return stockService.getStock();
     }
 
-    @GetMapping("/out")
+    @GetMapping("/low")
     public @ResponseBody
-    Stock getOutOfStock() {
-        return stockService.getOutOfStockItems();
+    List<Integer> getLowStock() {
+        return stockService.getLowStockItems();
     }
 
     @PostMapping("/{productId}/quantity")

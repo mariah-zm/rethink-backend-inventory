@@ -10,6 +10,7 @@ import com.rethink.inventory.repositories.StockRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,17 +29,17 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public Stock getOutOfStockItems() {
+    public List<Integer> getLowStockItems() {
         ArrayList<StockItem> stockItems = (ArrayList<StockItem>) stockRepository.findAll();
-        Stock stock = new Stock();
+        List<Integer> outOfStockIds = new ArrayList<>();
 
-        for(StockItem item : stockItems) {
-            if (item.getStatus() == ProductStatus.out_of_stock) {
-                stock.addStockItem(item);
+        for (StockItem item : stockItems) {
+            if (item.getStatus() != ProductStatus.in_stock) {
+                outOfStockIds.add(item.getProductId());
             }
         }
 
-        return stock;
+        return outOfStockIds;
     }
 
     @Override
@@ -48,6 +49,15 @@ public class StockServiceImpl implements StockService {
         if (item.isPresent()) {
             StockItem stockItem = item.get();
             stockItem.updateQuantity(quantity);
+
+            if (stockItem.getQuantity() == 0) {
+                stockItem.setStatus(ProductStatus.out_of_stock);
+            } else if (stockItem.getQuantity() <= 10) {
+                stockItem.setStatus(ProductStatus.running_low);
+            } else {
+                stockItem.setStatus(ProductStatus.in_stock);
+            }
+
             stockRepository.save(stockItem);
         } else {
             throw new ProductNotFoundException("Could no find product with id " + productId);
