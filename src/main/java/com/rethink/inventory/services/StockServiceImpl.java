@@ -1,5 +1,7 @@
 package com.rethink.inventory.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.rethink.inventory.exceptions.ProductNotFoundException;
 import com.rethink.inventory.models.Delivery;
 import com.rethink.inventory.models.DeliveryItem;
@@ -7,8 +9,13 @@ import com.rethink.inventory.models.Stock;
 import com.rethink.inventory.models.StockItem;
 import com.rethink.inventory.models.enums.ProductStatus;
 import com.rethink.inventory.repositories.StockRepository;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +24,12 @@ import java.util.Optional;
 public class StockServiceImpl implements StockService {
 
     private final StockRepository stockRepository;
+
+    @Value("${orders-service.url}")
+    private String ordersServiceUrl;
+
+    @Value("${orders-service.endpoints.order-status}")
+    private String orderStatusEndpoint;
 
     public StockServiceImpl(StockRepository stockRepository) {
         this.stockRepository = stockRepository;
@@ -90,6 +103,25 @@ public class StockServiceImpl implements StockService {
             }
         }
 
-        // TODO send message with orderId to order microservice so that order status is updated to delivered
+        try {
+            informOrdersService(delivery.getOrderId());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void informOrdersService(Long orderId) throws IOException {
+        String orderUrl = ordersServiceUrl + "/" + orderId + orderStatusEndpoint + "?orderStatus=received";
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        HttpPost postRequest = new HttpPost(orderUrl);
+        postRequest.addHeader("accept", "application/json");
+
+        HttpResponse response = httpClient.execute(postRequest);
+        int responseCode = response.getStatusLine().getStatusCode();
+        httpClient.getConnectionManager().shutdown();
+
+        if (responseCode != 200 && responseCode != 202) {
+            throw new RuntimeException("Response code is " + responseCode);
+        }
     }
 }
