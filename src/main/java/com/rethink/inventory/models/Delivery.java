@@ -7,7 +7,7 @@ import java.util.List;
 @Getter
 public class Delivery {
 
-    private Integer orderId;
+    private Long orderId;
     private List<DeliveryItem> deliveredItems;
 
 }

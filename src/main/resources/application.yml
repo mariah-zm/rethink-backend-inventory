@@ -17,3 +17,8 @@ server:
 
 database:
   url: ${DATABASE_URL}
+
+  orders-service:
+    url: "https://rethink-backend-orders.herokuapp.com/order"
+    endpoints:
+      order-status: "/status"
