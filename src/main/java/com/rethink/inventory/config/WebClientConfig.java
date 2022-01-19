@@ -14,7 +14,7 @@ public class WebClientConfig implements WebMvcConfigurer {
         registry.addMapping("/**").
                 allowedOrigins("*").
                 allowedMethods("HEAD", "OPTIONS", "POST", "GET", "DELETE", "PATCH").
-                exposedHeaders("Access-Control-Allow-Origin");
+                exposedHeaders("Access-Control-Allow-Origin", "Content-Type", "Authorization", "Content-Length", "X-Requested-With");
     }
 
 }
