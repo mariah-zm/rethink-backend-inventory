@@ -12,8 +12,8 @@ spring:
     pathmatch:
       matching-strategy: ant-path-matcher
 
-server:
-  port : 13000
+#server:
+#  port : 13000
 
 database:
   url: ${DATABASE_URL}
