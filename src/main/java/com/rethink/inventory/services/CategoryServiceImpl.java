@@ -24,7 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (category.isPresent()) {
             return category.get().getAisleNumber();
         } else {
-            throw new CategoryNotFoundException("The category " + categoryName.toString() + " was not found");
+            throw new CategoryNotFoundException("The category " + categoryName + " was not found");
         }
     }
 
