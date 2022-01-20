@@ -48,7 +48,8 @@ public class StockServiceImpl implements StockService {
 
         for (StockItem item : stockItems) {
             if (item.getStatus() != ProductStatus.in_stock) {
-                outOfStockIds.add(item.getProductId());
+                if (item.getProductId() < 10000)
+                    outOfStockIds.add(item.getProductId());
             }
         }
 
